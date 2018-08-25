@@ -28,6 +28,11 @@ const (
 	defaultSleep      = 1 * time.Second
 	defaultCmdTimeout = 1 * time.Minute
 	protocolVersion   = 9
+	scanCmd           = "SCAN"
+	cfgCmd            = "CONFIGURE"
+	protocolCmd       = "PROTOCOL"
+	greetingResp      = "DBVERSION"
+	okResp            = "OK"
 )
 
 var (
@@ -114,7 +119,7 @@ func (c *Client) fileCmd(p string) (r *Response, err error) {
 	id = c.tc.Next()
 	c.tc.StartRequest(id)
 
-	if _, err = fmt.Fprintf(c.tc.W, "SCAN\t%s\n", p); err != nil {
+	if _, err = fmt.Fprintf(c.tc.W, "%s\t%s\n", scanCmd, p); err != nil {
 		c.tc.EndRequest(id)
 		return
 	}
@@ -138,7 +143,7 @@ func (c *Client) fileCmd(p string) (r *Response, err error) {
 			return
 		}
 
-		if strings.HasPrefix(line, "OK") {
+		if strings.HasPrefix(line, okResp) {
 			break
 		}
 
@@ -183,7 +188,7 @@ func (c *Client) sendOpt(n string, v interface{}) (err error) {
 	defer c.conn.SetDeadline(ZeroTime)
 
 	c.conn.SetDeadline(time.Now().Add(c.cmdTimeout))
-	if _, err = fmt.Fprintf(c.tc.W, "CONFIGURE\t%s\t%s\n", n, v); err != nil {
+	if _, err = fmt.Fprintf(c.tc.W, "%s\t%s\t%s\n", cfgCmd, n, v); err != nil {
 		c.tc.EndRequest(id)
 		return
 	}
@@ -201,7 +206,7 @@ func (c *Client) sendOpt(n string, v interface{}) (err error) {
 		return
 	}
 
-	if !strings.HasPrefix(line, "OK") {
+	if !strings.HasPrefix(line, okResp) {
 		err = fmt.Errorf("Set option: %s failed: %s", n, line)
 		return
 	}
@@ -245,13 +250,13 @@ func NewClient(address string, connTimeOut, ioTimeOut time.Duration) (c *Client,
 		return
 	}
 
-	if !strings.HasPrefix(line, "DBVERSION") {
+	if !strings.HasPrefix(line, greetingResp) {
 		err = fmt.Errorf("Greeting failed: %s", line)
 		c.tc.Close()
 		return
 	}
 
-	if _, err = fmt.Fprintf(c.tc.W, "PROTOCOL\t%d\n", protocolVersion); err != nil {
+	if _, err = fmt.Fprintf(c.tc.W, "%s\t%d\n", protocolCmd, protocolVersion); err != nil {
 		c.tc.Close()
 		return
 	}
@@ -265,7 +270,7 @@ func NewClient(address string, connTimeOut, ioTimeOut time.Duration) (c *Client,
 		return
 	}
 
-	if !strings.HasPrefix(line, "OK") {
+	if !strings.HasPrefix(line, okResp) {
 		err = fmt.Errorf("Protocol negotiation failed: %s", line)
 		c.tc.Close()
 		return
