@@ -241,11 +241,11 @@ func NewClient(address string, connTimeOut, ioTimeOut time.Duration) (c *Client,
 		return
 	}
 
-	c.conn.SetDeadline(time.Now().Add(c.cmdTimeout))
 	defer c.conn.SetDeadline(ZeroTime)
 
 	c.tc = textproto.NewConn(c.conn)
 
+	c.conn.SetDeadline(time.Now().Add(c.cmdTimeout))
 	if line, err = c.tc.ReadLine(); err != nil {
 		return
 	}
@@ -256,6 +256,7 @@ func NewClient(address string, connTimeOut, ioTimeOut time.Duration) (c *Client,
 		return
 	}
 
+	c.conn.SetDeadline(time.Now().Add(c.cmdTimeout))
 	if _, err = fmt.Fprintf(c.tc.W, "%s\t%d\n", protocolCmd, protocolVersion); err != nil {
 		c.tc.Close()
 		return
@@ -266,6 +267,7 @@ func NewClient(address string, connTimeOut, ioTimeOut time.Duration) (c *Client,
 		return
 	}
 
+	c.conn.SetDeadline(time.Now().Add(c.cmdTimeout))
 	if line, err = c.tc.ReadLine(); err != nil {
 		return
 	}
