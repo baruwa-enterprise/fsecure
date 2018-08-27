@@ -214,9 +214,53 @@ func (c *Client) sendOpt(n string, v interface{}) (err error) {
 	return
 }
 
+func (c *Client) greeting() (err error) {
+	var line string
+
+	defer c.conn.SetDeadline(ZeroTime)
+
+	c.conn.SetDeadline(time.Now().Add(c.cmdTimeout))
+	if line, err = c.tc.ReadLine(); err != nil {
+		return
+	}
+
+	if !strings.HasPrefix(line, greetingResp) {
+		err = fmt.Errorf("Greeting failed: %s", line)
+		return
+	}
+
+	return
+}
+
+func (c *Client) proto() (err error) {
+	var line string
+
+	defer c.conn.SetDeadline(ZeroTime)
+
+	c.conn.SetDeadline(time.Now().Add(c.cmdTimeout))
+	if _, err = fmt.Fprintf(c.tc.W, "%s\t%d\n", protocolCmd, protocolVersion); err != nil {
+		return
+	}
+
+	if err = c.tc.W.Flush(); err != nil {
+		return
+	}
+
+	c.conn.SetDeadline(time.Now().Add(c.cmdTimeout))
+	if line, err = c.tc.ReadLine(); err != nil {
+		return
+	}
+
+	if !strings.HasPrefix(line, okResp) {
+		err = fmt.Errorf("Protocol negotiation failed: %s", line)
+		return
+	}
+
+	return
+}
+
 // NewClient creates and returns a new instance of Client
 func NewClient(address string, connTimeOut, ioTimeOut time.Duration) (c *Client, err error) {
-	var line string
 	if address == "" {
 		address = FsavSock
 	}
@@ -245,35 +289,12 @@ func NewClient(address string, connTimeOut, ioTimeOut time.Duration) (c *Client,
 
 	c.tc = textproto.NewConn(c.conn)
 
-	c.conn.SetDeadline(time.Now().Add(c.cmdTimeout))
-	if line, err = c.tc.ReadLine(); err != nil {
-		return
-	}
-
-	if !strings.HasPrefix(line, greetingResp) {
-		err = fmt.Errorf("Greeting failed: %s", line)
+	if err = c.greeting(); err != nil {
 		c.tc.Close()
 		return
 	}
 
-	c.conn.SetDeadline(time.Now().Add(c.cmdTimeout))
-	if _, err = fmt.Fprintf(c.tc.W, "%s\t%d\n", protocolCmd, protocolVersion); err != nil {
-		c.tc.Close()
-		return
-	}
-
-	if err = c.tc.W.Flush(); err != nil {
-		c.tc.Close()
-		return
-	}
-
-	c.conn.SetDeadline(time.Now().Add(c.cmdTimeout))
-	if line, err = c.tc.ReadLine(); err != nil {
-		return
-	}
-
-	if !strings.HasPrefix(line, okResp) {
-		err = fmt.Errorf("Protocol negotiation failed: %s", line)
+	if err = c.proto(); err != nil {
 		c.tc.Close()
 		return
 	}
