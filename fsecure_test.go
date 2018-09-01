@@ -38,7 +38,7 @@ func TestBasics(t *testing.T) {
 		if _, e = NewClient("fe80::879:d85f:f836:1b56%en1", 5*time.Second, 10*time.Second); e == nil {
 			t.Fatalf("An error should be returned")
 		}
-		expect := "The unix socket: fe80::879:d85f:f836:1b56%en1 does not exist"
+		expect := fmt.Sprintf(unixSockErr, "fe80::879:d85f:f836:1b56%en1")
 		if e.Error() != expect {
 			t.Errorf("Got %q want %q", e, expect)
 		}
@@ -140,7 +140,7 @@ func TestBasicError(t *testing.T) {
 	if e == nil {
 		t.Fatalf("An error should not be returned")
 	}
-	expected := fmt.Sprintf("The unix socket: %s does not exist", FsavSock)
+	expected := fmt.Sprintf(unixSockErr, FsavSock)
 	if e.Error() != expected {
 		t.Errorf("Got %q want %q", e, expected)
 	}

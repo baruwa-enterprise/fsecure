@@ -33,6 +33,10 @@ const (
 	protocolCmd       = "PROTOCOL"
 	greetingResp      = "DBVERSION"
 	okResp            = "OK"
+	unixSockErr       = "The unix socket: %s does not exist"
+	greetingErr       = "Greeting failed: %s"
+	protoErr          = "Protocol negotiation failed: %s"
+	setOptErr         = "Set option: %s failed: %s"
 )
 
 var (
@@ -207,7 +211,7 @@ func (c *Client) sendOpt(n string, v interface{}) (err error) {
 	}
 
 	if !strings.HasPrefix(line, okResp) {
-		err = fmt.Errorf("Set option: %s failed: %s", n, line)
+		err = fmt.Errorf(setOptErr, n, line)
 		return
 	}
 
@@ -225,7 +229,7 @@ func (c *Client) greeting() (err error) {
 	}
 
 	if !strings.HasPrefix(line, greetingResp) {
-		err = fmt.Errorf("Greeting failed: %s", line)
+		err = fmt.Errorf(greetingErr, line)
 		return
 	}
 
@@ -252,7 +256,7 @@ func (c *Client) proto() (err error) {
 	}
 
 	if !strings.HasPrefix(line, okResp) {
-		err = fmt.Errorf("Protocol negotiation failed: %s", line)
+		err = fmt.Errorf(protoErr, line)
 		return
 	}
 
@@ -266,7 +270,7 @@ func NewClient(address string, connTimeOut, ioTimeOut time.Duration) (c *Client,
 	}
 
 	if _, err = os.Stat(address); os.IsNotExist(err) {
-		err = fmt.Errorf("The unix socket: %s does not exist", address)
+		err = fmt.Errorf(unixSockErr, address)
 		return
 	}
 
