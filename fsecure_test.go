@@ -42,6 +42,8 @@ func TestBasics(t *testing.T) {
 		if e.Error() != expect {
 			t.Errorf("Got %q want %q", e, expect)
 		}
+	} else {
+		t.Skip("skipping test; $FSECURE_ADDRESS not set")
 	}
 }
 
@@ -60,6 +62,8 @@ func TestConnTimeOut(t *testing.T) {
 		if c.connTimeout != 5*time.Second {
 			t.Errorf("The default conn timeout should be set")
 		}
+	} else {
+		t.Skip("skipping test; $FSECURE_ADDRESS not set")
 	}
 }
 
@@ -83,6 +87,8 @@ func TestConnSleep(t *testing.T) {
 		if c.connSleep != expected {
 			t.Errorf("Calling c.SetConnSleep(%q) failed", expected)
 		}
+	} else {
+		t.Skip("skipping test; $FSECURE_ADDRESS not set")
 	}
 }
 
@@ -106,6 +112,8 @@ func TestCmdTimeOut(t *testing.T) {
 		if c.cmdTimeout != expected {
 			t.Errorf("Calling c.SetCmdTimeout(%q) failed", expected)
 		}
+	} else {
+		t.Skip("skipping test; $FSECURE_ADDRESS not set")
 	}
 }
 
@@ -132,6 +140,8 @@ func TestConnRetries(t *testing.T) {
 		if c.connRetries != 0 {
 			t.Errorf("Preventing negative values in c.SetConnRetries(%q) failed", -2)
 		}
+	} else {
+		t.Skip("skipping test; $FSECURE_ADDRESS not set")
 	}
 }
 
@@ -203,5 +213,7 @@ func TestScan(t *testing.T) {
 		if !r.Infected {
 			t.Errorf("r.Infected = %t, want %t", r.Infected, true)
 		}
+	} else {
+		t.Skip("skipping test; $FSECURE_ADDRESS not set")
 	}
 }
