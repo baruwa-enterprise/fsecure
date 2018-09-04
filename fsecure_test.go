@@ -146,13 +146,17 @@ func TestConnRetries(t *testing.T) {
 }
 
 func TestBasicError(t *testing.T) {
-	_, e := NewClient("", 5*time.Second, 10*time.Second)
-	if e == nil {
-		t.Fatalf("An error should not be returned")
-	}
-	expected := fmt.Sprintf(unixSockErr, FsavSock)
-	if e.Error() != expected {
-		t.Errorf("Got %q want %q", e, expected)
+	if _, e := os.Stat(FsavSock); os.IsNotExist(e) {
+		_, e := NewClient("", 5*time.Second, 10*time.Second)
+		if e == nil {
+			t.Fatalf("An error should be returned")
+		}
+		expected := fmt.Sprintf(unixSockErr, FsavSock)
+		if e.Error() != expected {
+			t.Errorf("Got %q want %q", e, expected)
+		}
+	} else {
+		t.Skip("skipping test; /tmp/.fsav-0 exists")
 	}
 }
 
