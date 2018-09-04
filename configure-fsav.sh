@@ -10,7 +10,7 @@ sed -i -e 's/^odsFileScanInsideMIME\s\+[0-9]/odsFileScanInsideMIME 1/' \
     -e 's/^socketpathGroup\s\+\S\+/socketpathGroup Debian-exim/' /etc/opt/f-secure/fssp/fssp.conf
 cp -v /opt/f-secure/fssp/etc/fsavd /etc/init.d/
 chmod +x /etc/init.d/fsavd
-/opt/f-secure/fssp/bin/dbupdate
+/opt/f-secure/fssp/bin/dbupdate || /bin/true
 /etc/init.d/fsavd start
 /etc/init.d/fsavd status
 ls -la /tmp

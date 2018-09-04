@@ -17,6 +17,8 @@ before_install:
   - sudo chmod +x ${TRAVIS_BUILD_DIR}/fsls-${FSECURE_VERSION}-rtm/fsls-${FSECURE_VERSION}
   - sudo ${TRAVIS_BUILD_DIR}/fsls-${FSECURE_VERSION}-rtm/fsls-${FSECURE_VERSION} --command-line-only --auto standalone lang=en noremotewui nolocallogin nofirewall
   - sudo ./configure-fsav.sh
+  - sudo mkdir -p /var/spool/testfiles
+  - sudo cp -v examples/data/* /var/spool/testfiles/
 
 go:
   - 1.10.x
