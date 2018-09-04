@@ -1,11 +1,15 @@
 language: go
 
 env:
-  - DEP_VERSION="0.4.1"
+  - DEP_VERSION="0.4.1" FSECURE_VERSION="11.10.68" FSECURE_ADDRESS="/tmp/.fsav-0"
 
 before_install:
   - curl -L -s https://github.com/golang/dep/releases/download/v${DEP_VERSION}/dep-linux-amd64 -o $GOPATH/bin/dep
   - chmod +x $GOPATH/bin/dep
+  - curl -Ov https://download.f-secure.com/corpro/ls/current/fsls-${FSECURE_VERSION}-rtm.tar.gz
+  - tar xzvf fsls-${FSECURE_VERSION}-rtm.tar.gz
+  - sudo ./fsls-${FSECURE_VERSION}-rtm/fsls-${FSECURE_VERSION} --command-line-only --auto standalone lang=en noremotewui nolocallogin nofirewall
+  - sudo ./configure-fsav.sh
 
 go:
   - 1.10.x
@@ -14,3 +18,9 @@ go:
 
 install:
   - make get-deps
+
+script:
+  go test -race -coverprofile=coverage.txt -covermode=atomic ./...
+
+after_success:
+  - bash <(curl -s https://codecov.io/bash)
