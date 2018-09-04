@@ -17,7 +17,7 @@ for i in $(seq 1 ${RETRY_MAX}); do
     /opt/f-secure/fssp/bin/dbupdate
     EXIT_CODE=$?
     [ "$EXIT_CODE" == "0" ] && break
-    sleep $((5 * $i))
+    sleep $((10 * $i))
     /opt/f-secure/fssp/bin/fsav --version
 done
 /etc/init.d/fsavd status
