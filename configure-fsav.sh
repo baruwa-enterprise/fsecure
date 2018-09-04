@@ -11,3 +11,5 @@ sed -i -e 's/^odsFileScanInsideMIME\s\+[0-9]/odsFileScanInsideMIME 1/' \
 cp -v /opt/f-secure/fssp/etc/fsavd /etc/init.d/
 chmod +x /etc/init.d/fsavd
 /etc/init.d/fsavd start
+/etc/init.d/fsavd status
+ls -la /tmp
