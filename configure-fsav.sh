@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-set -e
+# set -e
 RETRY_MAX=10
 sed -i -e 's/^odsFileScanInsideMIME\s\+[0-9]/odsFileScanInsideMIME 1/' \
     -e 's/^odsFilePrimaryActionOnInfection\s\+[0-9]/odsFilePrimaryActionOnInfection 1/' \
@@ -13,11 +13,13 @@ cp -v /opt/f-secure/fssp/etc/fsavd /etc/init.d/
 chmod +x /etc/init.d/fsavd
 /etc/init.d/fsavd start
 for i in $(seq 1 ${RETRY_MAX}); do
-    echo "Running dbupdate => ${RETRY_MAX}"
+    echo "Running dbupdate => ${i}"
     /opt/f-secure/fssp/bin/dbupdate
     EXIT_CODE=$?
     [ "$EXIT_CODE" == "0" ] && break
     sleep 10
+    /opt/f-secure/fssp/bin/fsav --version
 done
 /etc/init.d/fsavd status
 ls -la /tmp
+exit $EXIT_CODE
