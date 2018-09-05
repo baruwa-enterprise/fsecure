@@ -1,7 +1,7 @@
 language: go
 
 env:
-  - DEP_VERSION="0.4.1" FSECURE_VERSION="11.10.68" FSECURE_ADDRESS="/tmp/.fsav-0"
+  - DEP_VERSION="0.4.1" CGO_ENABLED=0 FSECURE_VERSION="11.10.68" FSECURE_ADDRESS="/tmp/.fsav-0"
 
 before_install:
   - curl -L -s https://github.com/golang/dep/releases/download/v${DEP_VERSION}/dep-linux-amd64 -o $GOPATH/bin/dep
@@ -21,8 +21,8 @@ before_install:
   - sudo cp -v examples/data/* /var/spool/testfiles/
 
 go:
-  # - 1.10.x
-  # - 1.11.x
+  - 1.10.x
+  - 1.11.x
   - master
 
 install:
