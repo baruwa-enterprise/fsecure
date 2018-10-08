@@ -2,14 +2,16 @@
 
 
 [[projects]]
+  digest = "1:c1b1102241e7f645bc8e0c22ae352e8f0dc6484b6cb4d132fa9f24174e0119e2"
   name = "github.com/spf13/pflag"
   packages = ["."]
-  revision = "9a97c102cda95a86cec2345a6f09f55a939babf5"
-  version = "v1.0.2"
+  pruneopts = "UT"
+  revision = "298182f68c66c05229eb03ac171abe6e309ee79a"
+  version = "v1.0.3"
 
 [solve-meta]
   analyzer-name = "dep"
   analyzer-version = 1
-  inputs-digest = "a310f604d906650d4d54252c207acabff6029f3be3fe50c32cd103e09085d9d4"
+  input-imports = ["github.com/spf13/pflag"]
   solver-name = "gps-cdcl"
   solver-version = 1
