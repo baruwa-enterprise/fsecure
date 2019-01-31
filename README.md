@@ -3,6 +3,7 @@
 Golang Fsecure Client
 
 [![Build Status](https://travis-ci.org/baruwa-enterprise/fsecure.svg?branch=master)](https://travis-ci.org/baruwa-enterprise/fsecure)
+[![codecov](https://codecov.io/gh/baruwa-enterprise/fsecure/branch/master/graph/badge.svg)](https://codecov.io/gh/baruwa-enterprise/fsecure)
 [![Go Report Card](https://goreportcard.com/badge/github.com/baruwa-enterprise/fsecure)](https://goreportcard.com/report/github.com/baruwa-enterprise/fsecure)
 [![GoDoc](https://godoc.org/github.com/baruwa-enterprise/fsecure?status.svg)](https://godoc.org/github.com/baruwa-enterprise/fsecure)
 [![MPLv2 License](https://img.shields.io/badge/license-MPLv2-blue.svg?style=flat-square)](https://www.mozilla.org/MPL/2.0/)
