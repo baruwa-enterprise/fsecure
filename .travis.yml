@@ -1,18 +1,16 @@
 language: go
 
 env:
-  - DEP_VERSION="0.4.1" CGO_ENABLED=0 FSECURE_VERSION="11.10.68" FSECURE_ADDRESS="/tmp/.fsav-0"
+  - CGO_ENABLED=0 FSECURE_VERSION="11.10.68" FSECURE_ADDRESS="/tmp/.fsav-0"
 
 before_install:
-  - curl -L -s https://github.com/golang/dep/releases/download/v${DEP_VERSION}/dep-linux-amd64 -o $GOPATH/bin/dep
-  - chmod +x $GOPATH/bin/dep
   - sudo rm -vf /opt/jdk_switcher/jdk_switcher.sh
   - sudo dpkg --print-foreign-architectures
   - sudo dpkg --add-architecture i386
   - sudo dpkg --print-foreign-architectures
   - sudo apt-get update -qq
   - sudo apt-get install libc6-dev:i386 libpam-modules:i386 libstdc++6:i386 rpm zlib1g:i386
-  - curl -Ov https://download.f-secure.com/corpro/ls/current/fsls-${FSECURE_VERSION}-rtm.tar.gz
+  - curl -Ov https://download.f-secure.com/corpro/ls/ls11.10/fsls-${FSECURE_VERSION}-rtm.tar.gz
   - tar xzvf fsls-${FSECURE_VERSION}-rtm.tar.gz
   - sudo chmod +x ${TRAVIS_BUILD_DIR}/fsls-${FSECURE_VERSION}-rtm/fsls-${FSECURE_VERSION}
   - sudo ${TRAVIS_BUILD_DIR}/fsls-${FSECURE_VERSION}-rtm/fsls-${FSECURE_VERSION} --command-line-only --auto standalone lang=en noremotewui nolocallogin nofirewall
@@ -21,12 +19,8 @@ before_install:
   - sudo cp -v examples/data/* /var/spool/testfiles/
 
 go:
-  - 1.10.x
-  # - 1.11.x
+  - 1.x
   # - master
-
-install:
-  - make get-deps
 
 script:
   go test -coverprofile=coverage.txt -covermode=atomic ./...
