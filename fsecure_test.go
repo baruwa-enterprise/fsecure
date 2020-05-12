@@ -183,7 +183,7 @@ func TestScan(t *testing.T) {
 		if r.ArchiveItem != "" {
 			t.Errorf("r.ArchiveItem = %q, want %q", r.ArchiveItem, "")
 		}
-		sig := "EICAR-Test-File (not a virus)"
+		sig := "Malware.Eicar-Test-Signature"
 		if r.Signature != sig {
 			t.Errorf("r.Signature = %q, want %q", r.Signature, sig)
 		}
@@ -206,7 +206,7 @@ func TestScan(t *testing.T) {
 		if r.ArchiveItem != an {
 			t.Errorf("r.ArchiveItem = %q, want %q", r.ArchiveItem, an)
 		}
-		sig = "Trojan.GenericKD.40336677"
+		sig = "Heuristic.HEUR/AGEN.1124490"
 		if r.Signature != sig {
 			t.Errorf("r.Signature = %q, want %q", r.Signature, sig)
 		}
