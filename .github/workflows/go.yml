@@ -36,8 +36,8 @@ jobs:
         sudo apt-get install libc6-dev:i386 libpam-modules:i386 libstdc++6:i386 rpm zlib1g:i386
         curl -Ov https://download.f-secure.com/corpro/ls/ls11.10/fsls-${FSECURE_VERSION}-rtm.tar.gz
         tar xzvf fsls-${FSECURE_VERSION}-rtm.tar.gz
-        sudo chmod +x ${TRAVIS_BUILD_DIR}/fsls-${FSECURE_VERSION}-rtm/fsls-${FSECURE_VERSION}
-        sudo ${TRAVIS_BUILD_DIR}/fsls-${FSECURE_VERSION}-rtm/fsls-${FSECURE_VERSION} --command-line-only --auto standalone lang=en noremotewui nolocallogin nofirewall
+        sudo chmod +x ./fsls-${FSECURE_VERSION}-rtm/fsls-${FSECURE_VERSION}
+        sudo ./fsls-${FSECURE_VERSION}-rtm/fsls-${FSECURE_VERSION} --command-line-only --auto standalone lang=en noremotewui nolocallogin nofirewall
         sudo ./configure-fsav.sh
         sudo mkdir -p /var/spool/testfiles
         sudo cp -v examples/data/* /var/spool/testfiles/
