@@ -23,9 +23,11 @@ jobs:
       uses: actions/checkout@v2
 
     - name: Get dependencies
+      env:
+        CGO_ENABLED: 0
+        FSECURE_VERSION: 11.10.68
+        FSECURE_ADDRESS: /tmp/.fsav-0
       run: |
-        export CGO_ENABLED=0 FSECURE_VERSION="11.10.68" FSECURE_ADDRESS="/tmp/.fsav-0"
-        sudo export CGO_ENABLED=0 FSECURE_VERSION="11.10.68" FSECURE_ADDRESS="/tmp/.fsav-0"
         sudo rm -vf /opt/jdk_switcher/jdk_switcher.sh
         sudo dpkg --print-foreign-architectures
         sudo dpkg --add-architecture i386
