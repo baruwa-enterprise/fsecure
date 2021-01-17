@@ -10,9 +10,9 @@ jobs:
 
   build:
     env:
-      - CGO_ENABLED: 0
-      - FSECURE_VERSION: "11.10.68"
-      - FSECURE_ADDRESS: "/tmp/.fsav-0"
+      CGO_ENABLED: 0
+      FSECURE_VERSION: "11.10.68"
+      FSECURE_ADDRESS: "/tmp/.fsav-0"
     strategy:
       matrix:
         go-version: ["1.15", "1.10"]
