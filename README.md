@@ -2,7 +2,7 @@
 
 Golang Fsecure Client
 
-[![Build Status](https://github.com/baruwa-enterprise/fsecure/workflows/Go/badge.svg)](https://github.com/baruwa-enterprise/fsecure/actions?query=workflow%3AGo)
+[![Build Status](https://github.com/baruwa-enterprise/fsecure/workflows/Ci/badge.svg)](https://github.com/baruwa-enterprise/fsecure/actions?query=workflow%3ACi)
 [![codecov](https://codecov.io/gh/baruwa-enterprise/fsecure/branch/master/graph/badge.svg)](https://codecov.io/gh/baruwa-enterprise/fsecure)
 [![Go Report Card](https://goreportcard.com/badge/github.com/baruwa-enterprise/fsecure)](https://goreportcard.com/report/github.com/baruwa-enterprise/fsecure)
 [![GoDoc](https://godoc.org/github.com/baruwa-enterprise/fsecure?status.svg)](https://godoc.org/github.com/baruwa-enterprise/fsecure)
