@@ -1,0 +1,57 @@
+name: Ci
+
+on:
+  push:
+    branches: [ master ]
+  pull_request:
+    branches: [ master ]
+
+jobs:
+
+  build:
+    env:
+      - CGO_ENABLED: 0
+      - FSECURE_VERSION: "11.10.68"
+      - FSECURE_ADDRESS: "/tmp/.fsav-0"
+    strategy:
+      matrix:
+        go-version: ["1.15", "1.10"]
+    name: Tests
+    runs-on: ubuntu-latest
+    steps:
+
+    - name: Set up Go ${{ matrix.go-version }}
+      uses: actions/setup-go@v2
+      with:
+        go-version: ${{ matrix.go-version }}
+
+    - name: Check out code into the Go module directory
+      uses: actions/checkout@v2
+
+    - name: Get dependencies
+      run: |
+        go get -v -t -d ./...
+        sudo rm -vf /opt/jdk_switcher/jdk_switcher.sh
+        sudo dpkg --print-foreign-architectures
+        sudo dpkg --add-architecture i386
+        sudo dpkg --print-foreign-architectures
+        sudo apt-get update -qq
+        sudo apt-get install libc6-dev:i386 libpam-modules:i386 libstdc++6:i386 rpm zlib1g:i386
+        curl -Ov https://download.f-secure.com/corpro/ls/ls11.10/fsls-${FSECURE_VERSION}-rtm.tar.gz
+        tar xzvf fsls-${FSECURE_VERSION}-rtm.tar.gz
+        sudo chmod +x ${TRAVIS_BUILD_DIR}/fsls-${FSECURE_VERSION}-rtm/fsls-${FSECURE_VERSION}
+        sudo ${TRAVIS_BUILD_DIR}/fsls-${FSECURE_VERSION}-rtm/fsls-${FSECURE_VERSION} --command-line-only --auto standalone lang=en noremotewui nolocallogin nofirewall
+        sudo ./configure-fsav.sh
+        sudo mkdir -p /var/spool/testfiles
+        sudo cp -v examples/data/* /var/spool/testfiles/
+    - name: Build
+      run: go build -v .
+
+    - name: Test
+      run: go test -race -coverprofile=coverage.txt -covermode=atomic ./...
+
+    - name: Upload coverage to Codecov
+      uses: codecov/codecov-action@v1
+      with:
+        file: ./coverage.txt
+        fail_ci_if_error: false
