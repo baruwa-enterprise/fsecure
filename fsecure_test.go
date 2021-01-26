@@ -1,4 +1,4 @@
-// Copyright (C) 2018 Andrew Colin Kissa <andrew@datopdog.io>
+// Copyright (C) 2018-2021 Andrew Colin Kissa <andrew@datopdog.io>
 // This Source Code Form is subject to the terms of the Mozilla Public
 // License, v. 2.0. If a copy of the MPL was not distributed with this file,
 // You can obtain one at http://mozilla.org/MPL/2.0/.
@@ -10,6 +10,7 @@ Fsecure - Golang F-Secure client Library
 package fsecure
 
 import (
+	"context"
 	"fmt"
 	"os"
 	"testing"
@@ -27,7 +28,8 @@ func TestBasics(t *testing.T) {
 	}
 
 	if _, e := os.Stat(address); !os.IsNotExist(e) {
-		c, e := NewClient(address, 5*time.Second, 10*time.Second)
+		ctx := context.Background()
+		c, e := NewClient(ctx, address, 5*time.Second, 10*time.Second)
 		if e != nil {
 			t.Fatalf("An error should not be returned: %s", e)
 		}
@@ -35,7 +37,7 @@ func TestBasics(t *testing.T) {
 		if c.address != address {
 			t.Errorf("Got %q want %q", c.address, address)
 		}
-		if _, e = NewClient("fe80::879:d85f:f836:1b56%en1", 5*time.Second, 10*time.Second); e == nil {
+		if _, e = NewClient(ctx, "fe80::879:d85f:f836:1b56%en1", 5*time.Second, 10*time.Second); e == nil {
 			t.Fatalf("An error should be returned")
 		}
 		expect := fmt.Sprintf(unixSockErr, "fe80::879:d85f:f836:1b56%en1")
@@ -54,7 +56,8 @@ func TestConnTimeOut(t *testing.T) {
 	}
 
 	if _, e := os.Stat(address); !os.IsNotExist(e) {
-		c, e := NewClient(address, 5*time.Second, 10*time.Second)
+		ctx := context.Background()
+		c, e := NewClient(ctx, address, 5*time.Second, 10*time.Second)
 		if e != nil {
 			t.Fatalf("An error should not be returned")
 		}
@@ -74,7 +77,8 @@ func TestConnSleep(t *testing.T) {
 	}
 
 	if _, e := os.Stat(address); !os.IsNotExist(e) {
-		c, e := NewClient(address, 5*time.Second, 10*time.Second)
+		ctx := context.Background()
+		c, e := NewClient(ctx, address, 5*time.Second, 10*time.Second)
 		if e != nil {
 			t.Fatalf("An error should not be returned")
 		}
@@ -99,7 +103,8 @@ func TestCmdTimeOut(t *testing.T) {
 	}
 
 	if _, e := os.Stat(address); !os.IsNotExist(e) {
-		c, e := NewClient(address, 5*time.Second, 10*time.Second)
+		ctx := context.Background()
+		c, e := NewClient(ctx, address, 5*time.Second, 10*time.Second)
 		if e != nil {
 			t.Fatalf("An error should not be returned")
 		}
@@ -124,7 +129,8 @@ func TestConnRetries(t *testing.T) {
 	}
 
 	if _, e := os.Stat(address); !os.IsNotExist(e) {
-		c, e := NewClient(address, 5*time.Second, 10*time.Second)
+		ctx := context.Background()
+		c, e := NewClient(ctx, address, 5*time.Second, 10*time.Second)
 		if e != nil {
 			t.Fatalf("An error should not be returned")
 		}
@@ -147,7 +153,8 @@ func TestConnRetries(t *testing.T) {
 
 func TestBasicError(t *testing.T) {
 	if _, e := os.Stat(FsavSock); os.IsNotExist(e) {
-		_, e := NewClient("", 5*time.Second, 10*time.Second)
+		ctx := context.Background()
+		_, e := NewClient(ctx, "", 5*time.Second, 10*time.Second)
 		if e == nil {
 			t.Fatalf("An error should be returned")
 		}
@@ -167,7 +174,8 @@ func TestScan(t *testing.T) {
 	}
 
 	if _, e := os.Stat(address); !os.IsNotExist(e) {
-		c, e := NewClient(address, 5*time.Second, 10*time.Second)
+		ctx := context.Background()
+		c, e := NewClient(ctx, address, 5*time.Second, 10*time.Second)
 		if e != nil {
 			t.Fatalf("An error should not be returned")
 		}

@@ -1,4 +1,4 @@
-// Copyright (C) 2018 Andrew Colin Kissa <andrew@datopdog.io>
+// Copyright (C) 2018-2021 Andrew Colin Kissa <andrew@datopdog.io>
 // This Source Code Form is subject to the terms of the Mozilla Public
 // License, v. 2.0. If a copy of the MPL was not distributed with this file,
 // You can obtain one at http://mozilla.org/MPL/2.0/.
@@ -10,6 +10,7 @@ Fsecure - Golang F-Secure client Library example program
 package main
 
 import (
+	"context"
 	"errors"
 	"fmt"
 	"log"
@@ -75,7 +76,8 @@ func main() {
 	flag.ErrHelp = errors.New("")
 	flag.CommandLine.SortFlags = false
 	flag.Parse()
-	c, e := fsecure.NewClient(address, 5*time.Second, 30*time.Second)
+	ctx := context.Background()
+	c, e := fsecure.NewClient(ctx, address, 5*time.Second, 30*time.Second)
 	if e != nil {
 		log.Fatalln(e)
 		return
