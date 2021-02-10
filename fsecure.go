@@ -72,7 +72,9 @@ type Client struct {
 
 // SetCmdTimeout sets the cmd timeout
 func (c *Client) SetCmdTimeout(t time.Duration) {
-	c.cmdTimeout = t
+	if t > 0 {
+		c.cmdTimeout = t
+	}
 }
 
 // SetConnRetries sets the number of times
@@ -87,7 +89,9 @@ func (c *Client) SetConnRetries(s int) {
 // SetConnSleep sets the connection retry sleep
 // duration in seconds
 func (c *Client) SetConnSleep(s time.Duration) {
-	c.connSleep = s
+	if s > 0 {
+		c.connSleep = s
+	}
 }
 
 // SetOptions sets the fsav config options on the server
@@ -273,6 +277,14 @@ func NewClient(ctx context.Context, address string, connTimeOut, ioTimeOut time.
 	if _, err = os.Stat(address); os.IsNotExist(err) {
 		err = fmt.Errorf(unixSockErr, address)
 		return
+	}
+
+	if connTimeOut == 0 {
+		connTimeOut = defaultTimeout
+	}
+
+	if ioTimeOut == 0 {
+		ioTimeOut = defaultCmdTimeout
 	}
 
 	c = &Client{
